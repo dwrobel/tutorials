@@ -1,9 +1,9 @@
-// gcc -o wayland-egl wayland-egl.c -lwayland-client -lwayland-egl -lEGL -lGL
+// gcc -o wayland-egl wayland-egl.c $(pkg-config --cflags --libs wayland-client wayland-egl glesv2 egl)
 
 #include <wayland-client.h>
 #include <wayland-egl.h>
 #include <EGL/egl.h>
-#include <GL/gl.h>
+#include <GLES2/gl2.h>
 #include <string.h>
 
 #define WIDTH 256
