@@ -15,11 +15,14 @@
 #include <xkbcommon/xkbcommon.h>
 #include <string.h>
 #include <stdio.h>
+#include <poll.h>
+#include <errno.h>
 
 #define WIDTH 256
 #define HEIGHT 256
 
 static struct wl_display *display;
+static int fd;
 static struct wl_compositor *compositor = NULL;
 static struct wl_shell *shell = NULL;
 static struct wl_seat *seat = NULL;
@@ -182,6 +185,7 @@ int main () {
 	xkb_context = xkb_context_new (XKB_CONTEXT_NO_FLAGS);
 
 	display = wl_display_connect (NULL);
+	fd = wl_display_get_fd(display);
 	struct wl_registry *registry = wl_display_get_registry (display);
 	wl_registry_add_listener (registry, &registry_listener, NULL);
 	wl_display_roundtrip (display);
@@ -193,8 +197,31 @@ int main () {
 	create_window (&window, WIDTH, HEIGHT);
 	
 	while (running) {
-		wl_display_dispatch_pending (display);
-		draw_window (&window);
+	    int rv;
+#ifndef SKIP_READING_EVENTS
+	    while (wl_display_prepare_read(display) < 0) {
+		wl_display_dispatch_pending(display);
+	    }
+
+	    wl_display_flush(display);
+
+	    do {
+	        struct pollfd fds = {
+	    	    .fd = fd,
+		    .events = POLLIN
+	        };
+
+		rv = poll(&fds, 1, 1);
+	    } while(rv == -1 && rv == EINTR);
+
+	    if (rv <= 0) {
+		wl_display_cancel_read(display);
+	    } else {
+		wl_display_read_events(display);
+	    }
+#endif
+	    wl_display_dispatch_pending (display);
+	    draw_window (&window);
 	}
 	
 	delete_window (&window);
