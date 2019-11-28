@@ -108,6 +108,8 @@ static void seat_capabilities (void *data, struct wl_seat *seat, uint32_t capabi
 static struct wl_seat_listener seat_listener = {&seat_capabilities};
 
 static void registry_add_object (void *data, struct wl_registry *registry, uint32_t name, const char *interface, uint32_t version) {
+	printf("registry_add_object(data:%p, registry:%p, name:%2u, interface:%s, version:%u)\n", data, registry, name, interface, version);
+
 	if (!strcmp(interface,"wl_compositor")) {
 		compositor = wl_registry_bind (registry, name, &wl_compositor_interface, 1);
 	}
@@ -120,7 +122,7 @@ static void registry_add_object (void *data, struct wl_registry *registry, uint3
 	}
 }
 static void registry_remove_object (void *data, struct wl_registry *registry, uint32_t name) {
-	
+	printf("registry_remove_object(data:%p, registry:%p, name:%2u)\n", data, registry, name);
 }
 static struct wl_registry_listener registry_listener = {&registry_add_object, &registry_remove_object};
 
