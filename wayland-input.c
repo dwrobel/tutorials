@@ -96,13 +96,20 @@ static void keyboard_modifiers (void *data, struct wl_keyboard *keyboard, uint32
 static struct wl_keyboard_listener keyboard_listener = {&keyboard_keymap, &keyboard_enter, &keyboard_leave, &keyboard_key, &keyboard_modifiers};
 
 static void seat_capabilities (void *data, struct wl_seat *seat, uint32_t capabilities) {
+	printf("seat_capabilities(data:%p, seat:%p, capabilities:0x%x)\n", data, seat, capabilities);
+
 	if (capabilities & WL_SEAT_CAPABILITY_POINTER) {
+		printf("seat_capabilities - pointer\n");
 		struct wl_pointer *pointer = wl_seat_get_pointer (seat);
 		wl_pointer_add_listener (pointer, &pointer_listener, NULL);
 	}
 	if (capabilities & WL_SEAT_CAPABILITY_KEYBOARD) {
+		printf("seat_capabilities - keyboard\n");
 		struct wl_keyboard *keyboard = wl_seat_get_keyboard (seat);
 		wl_keyboard_add_listener (keyboard, &keyboard_listener, NULL);
+	}
+	if (capabilities & WL_SEAT_CAPABILITY_TOUCH) {
+		printf("seat_capabilities - touch\n");
 	}
 }
 static struct wl_seat_listener seat_listener = {&seat_capabilities};
