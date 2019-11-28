@@ -1,5 +1,5 @@
 //    GL: gcc -o wayland-egl wayland-egl.c $(pkg-config --cflags --libs wayland-client wayland-egl glesv2 egl)
-// epoxy: gcc -DHAVE_EPOXY -o wayland-egl wayland-egl.c $(pkg-config --cflags --libs epoxy wayland-client wayland-egl glesv2 egl)
+// epoxy: gcc -DHAVE_EPOXY -o wayland-egl wayland-egl.c $(pkg-config --cflags --libs epoxy wayland-client wayland-egl)
 
 #include <wayland-client.h>
 #include <wayland-egl.h>
