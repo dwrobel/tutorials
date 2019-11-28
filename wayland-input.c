@@ -170,6 +170,8 @@ static void draw_window (struct window *window) {
 }
 
 int main () {
+	xkb_context = xkb_context_new (XKB_CONTEXT_NO_FLAGS);
+
 	display = wl_display_connect (NULL);
 	struct wl_registry *registry = wl_display_get_registry (display);
 	wl_registry_add_listener (registry, &registry_listener, NULL);
@@ -177,8 +179,6 @@ int main () {
 	
 	egl_display = eglGetDisplay (display);
 	eglInitialize (egl_display, NULL, NULL);
-	
-	xkb_context = xkb_context_new (XKB_CONTEXT_NO_FLAGS);
 	
 	struct window window;
 	create_window (&window, WIDTH, HEIGHT);
