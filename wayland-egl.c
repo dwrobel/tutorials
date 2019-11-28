@@ -26,6 +26,7 @@ struct window {
 	struct wl_shell_surface *shell_surface;
 	struct wl_egl_window *egl_window;
 	EGLSurface egl_surface;
+	int color;
 };
 
 // listeners
@@ -55,7 +56,7 @@ static void shell_surface_popup_done (void *data, struct wl_shell_surface *shell
 static struct wl_shell_surface_listener shell_surface_listener = {&shell_surface_ping, &shell_surface_configure, &shell_surface_popup_done};
 
 static void create_window (struct window *window, int32_t width, int32_t height) {
-	eglBindAPI (EGL_OPENGL_API);
+	eglBindAPI (EGL_OPENGL_ES_API);
 	EGLint attributes[] = {
 		EGL_RED_SIZE, 8,
 		EGL_GREEN_SIZE, 8,
@@ -73,6 +74,7 @@ static void create_window (struct window *window, int32_t width, int32_t height)
 	window->egl_window = wl_egl_window_create (window->surface, width, height);
 	window->egl_surface = eglCreateWindowSurface (egl_display, config, window->egl_window, NULL);
 	eglMakeCurrent (egl_display, window->egl_surface, window->egl_surface, window->egl_context);
+	window->color = 0;
 }
 static void delete_window (struct window *window) {
 	eglDestroySurface (egl_display, window->egl_surface);
@@ -82,7 +84,9 @@ static void delete_window (struct window *window) {
 	eglDestroyContext (egl_display, window->egl_context);
 }
 static void draw_window (struct window *window) {
-	glClearColor (0.0, 1.0, 0.0, 1.0);
+	window->color = (window->color + 1) % 256;
+	float c = window->color / 255.0;
+	glClearColor (0.0, c, 0.0, 1.0);
 	glClear (GL_COLOR_BUFFER_BIT);
 	eglSwapBuffers (egl_display, window->egl_surface);
 }
