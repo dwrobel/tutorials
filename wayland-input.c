@@ -1,9 +1,15 @@
-// gcc -o wayland-input wayland-input.c -lwayland-client -lwayland-egl -lEGL -lGL -lxkbcommon
+//    GL: gcc -o wayland-input wayland-input.c $(pkg-config --cflags --libs wayland-client wayland-egl glesv2 egl xkbcommon)
+// epoxy: gcc -DHAVE_EPOXY -o wayland-input wayland-input.c $(pkg-config --cflags --libs epoxy wayland-client wayland-egl xkbcommon)
+
 
 #include <wayland-client.h>
 #include <wayland-egl.h>
-#include <EGL/egl.h>
-#include <GL/gl.h>
+#ifdef HAVE_EPOXY
+#  include <epoxy/egl.h>
+#else
+#  include <EGL/egl.h>
+#endif
+#include <GLES2/gl2.h>
 #include <sys/mman.h>
 #include <unistd.h>
 #include <xkbcommon/xkbcommon.h>
