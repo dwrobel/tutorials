@@ -5,10 +5,10 @@
 #  include <epoxy/egl.h>
 #else
 #  include <EGL/egl.h>
+#  include <GLES2/gl2.h>
 #endif
 #include <wayland-client.h>
 #include <wayland-egl.h>
-#include <GLES2/gl2.h>
 #include <string.h>
 
 #define WIDTH 256
