@@ -1,0 +1,27 @@
+{
+    "app-id": "com.github.dwrobel.tutorials.wayland-egl-input-test",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "19.08",
+    "sdk": "org.freedesktop.Sdk",
+    "command": "wayland-egl-test",
+    "finish-args": [ "--share=network",
+                     "--socket=wayland",
+                     "--device=dri"
+    ],
+    "modules": [
+        {
+            "name": "wayland-input",
+            "buildsystem": "simple",
+            "build-commands": [
+                "gcc -O2 -ggdb3 -o wayland-egl-test wayland-input.c $(pkg-config --cflags --libs wayland-client wayland-egl glesv2 egl xkbcommon)",
+                "install -D wayland-egl-test /app/bin/wayland-egl-test"
+            ],
+            "sources": [
+                {
+                    "type": "dir",
+                    "path": "."
+                }
+            ]
+        }
+    ]
+}
