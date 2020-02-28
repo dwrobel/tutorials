@@ -8,6 +8,7 @@
 #  include <EGL/egl.h>
 #  include <GLES2/gl2.h>
 #endif
+#include <assert.h>
 #include <wayland-client.h>
 #include <wayland-egl.h>
 #include <sys/mman.h>
@@ -188,15 +189,28 @@ static void draw_window (struct window *window) {
 
 int main () {
 	xkb_context = xkb_context_new (XKB_CONTEXT_NO_FLAGS);
+	assert(xkb_context != NULL);
 
 	display = wl_display_connect (NULL);
+	assert(display != NULL);
 	fd = wl_display_get_fd(display);
+	assert(fd != -1);
+
 	struct wl_registry *registry = wl_display_get_registry (display);
+	assert(registry != NULL);
+
 	wl_registry_add_listener (registry, &registry_listener, NULL);
 	wl_display_roundtrip (display);
 	
 	egl_display = eglGetDisplay (display);
-	eglInitialize (egl_display, NULL, NULL);
+
+	{
+	    EGLint major;
+	    EGLint minor;
+	    EGLBoolean rv = eglInitialize (egl_display, &major, &minor);
+	    assert(rv != EGL_FALSE);
+	    printf("%d = eglInitialize(%p, %d, %d)\n", rv, egl_display, major, minor);
+	}
 	
 	struct window window;
 	create_window (&window, WIDTH, HEIGHT);
