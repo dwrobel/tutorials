@@ -93,8 +93,9 @@ static void create_window (struct window *window, int32_t width, int32_t height)
 	EGL_NONE};
 	EGLConfig config;
 	EGLint num_config;
+	EGLint contextAttributes[] = { EGL_CONTEXT_MAJOR_VERSION, 2, EGL_NONE };
 	eglChooseConfig (egl_display, attributes, &config, 1, &num_config);
-	window->egl_context = eglCreateContext (egl_display, config, EGL_NO_CONTEXT, NULL);
+	window->egl_context = eglCreateContext (egl_display, config, EGL_NO_CONTEXT, contextAttributes);
 	
 	window->surface = wl_compositor_create_surface (compositor);
 	window->shell_surface = wl_shell_get_shell_surface (shell, window->surface);
