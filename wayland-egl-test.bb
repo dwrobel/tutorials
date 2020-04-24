@@ -10,7 +10,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 S = "${WORKDIR}/git/"
 
 SRC_URI = " \
-    git://github.com/dwrobel/tutorials.git;protocol=http;branch=glesv2;rev=55da3d1fb44df16145d2e7e63b1b0ec98d6d9bef \
+    git://github.com/dwrobel/tutorials.git;protocol=http;branch=glesv2;rev=b60c84ed6426260e941e41f3a292fa5656755d20 \
 "
 
 inherit pkgconfig
