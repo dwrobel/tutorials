@@ -23,3 +23,7 @@ SOURCES = main.cpp egl-window.cpp
 
 TARGET = qt-egl-test
 TEMPLATE = app
+
+target.path=$$PREFIX/usr/bin
+
+INSTALLS += target
