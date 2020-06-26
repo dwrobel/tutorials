@@ -19,6 +19,7 @@
 
 #include <GLES2/gl2.h>
 #include <gtk/gtk.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
   gtk_init(&argc, &argv);
