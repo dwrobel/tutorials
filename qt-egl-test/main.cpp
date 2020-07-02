@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
 
   QSurfaceFormat format;
   format.setSamples(24);
+  format.setRenderableType(QSurfaceFormat::OpenGLES);
 
   EGLWindow window;
   window.setFormat(format);
