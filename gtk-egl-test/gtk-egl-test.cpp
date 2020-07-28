@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
   gtk_init(&argc, &argv);
 
   GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  printf("main() window=%p\n", window);
   gtk_window_fullscreen(GTK_WINDOW(window));
   gtk_widget_add_events(window, 0);
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
@@ -35,12 +36,28 @@ int main(int argc, char *argv[]) {
 
   g_signal_connect(
       glarea, "realize", G_CALLBACK(+[](GtkGLArea *glarea) {
-        printf("realize()\n");
+        printf("realize() glarea=%p\n", glarea);
+
+        GError *error = gtk_gl_area_get_error(glarea);
+        if (error) {
+          printf("realize(1) error(%d,%d): %s\n", error->domain, error->code, error->message);
+          return;
+        }
+
         gtk_gl_area_make_current(glarea);
 
+        error = gtk_gl_area_get_error(glarea);
+        if (error) {
+          printf("realize(2) error(%d.%d): %s\n", error->domain, error->code, error->message);
+          return;
+        }
+
         GdkGLContext *glcontext = gtk_gl_area_get_context(glarea);
+        printf("realize() glcontext=%p\n", glcontext);
         GdkWindow *glwindow = gdk_gl_context_get_window(glcontext);
+        printf("realize() glwindow=%p\n", glwindow);
         GdkFrameClock *frame_clock = gdk_window_get_frame_clock(glwindow);
+        printf("realize() frame_clock=%p\n", frame_clock);
 
         g_signal_connect_swapped(frame_clock, "update",
                                  G_CALLBACK(gtk_gl_area_queue_render), glarea);
