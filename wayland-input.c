@@ -231,6 +231,7 @@ int main () {
 	wl_display_roundtrip (display);
 	
 	egl_display = eglGetDisplay (display);
+        assert(egl_display != EGL_NO_DISPLAY);
 
 	{
 	    EGLint major;
