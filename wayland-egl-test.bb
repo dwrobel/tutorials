@@ -3,14 +3,12 @@ DESCRIPTION = "Simple application to test wayland EGL subsystem"
 LICENSE = "Unlicense"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=0d2f730e01d19e8f457a65e092b60770"
 
-DEPENDS = "virtual/egl virtual/libgles2 libepoxy libxkbcommon"
-
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+DEPENDS = "virtual/egl virtual/libgles2 libepoxy libxkbcommon wayland wayland-egl"
 
 S = "${WORKDIR}/git/"
 
 SRC_URI = " \
-    git://github.com/dwrobel/tutorials.git;protocol=http;branch=glesv2;rev=b60c84ed6426260e941e41f3a292fa5656755d20 \
+    git://github.com/dwrobel/tutorials.git;protocol=http;branch=glesv2;rev=34a96fccc700b049c73fa34ea39939bb5e706335 \
 "
 
 inherit pkgconfig
@@ -21,7 +19,8 @@ TEST_NAME_EPOXY   = "wayland-egl-test-epoxy"
 INPUT_NAME         = "wayland-egl-test-input"
 INPUT_NAME_EPOXY   = "wayland-egl-test-input-epoxy"
 
-TARGET_CFLAGS     += " -O3 -ggdb3"
+# It's a test application, not a benchmark
+TARGET_CFLAGS     += " -O0 -ggdb3"
 
 TARGET_CC_ARCH    += "${LDFLAGS}"
 
@@ -42,4 +41,3 @@ do_install() {
 }
 
 FILES_${PN} += "${bindir}/*"
-
